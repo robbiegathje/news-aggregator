@@ -64,3 +64,15 @@ with app.app_context():
 		db.session.add(new_lang)
 	
 	db.session.commit()
+
+	testuser = User.register(username='testuser', password='testing')
+	db.session.add(testuser)
+	db.session.commit()
+
+	testuser_refresh = User.query.filter_by(username='testuser').first()
+	english = Language.query.filter_by(language='English').first()
+	us = Country.query.filter_by(country='United States Of America').first()
+	testuser_refresh.languages.append(english)
+	testuser_refresh.countries.append(us)
+	db.session.add(testuser_refresh)
+	db.session.commit()
