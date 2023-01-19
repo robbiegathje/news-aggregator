@@ -34,6 +34,7 @@ class Language (db.Model):
 	__tablename__ = 'languages'
 	id = db.Column(db.Integer(), primary_key=True)
 	code = db.Column(db.String(2), unique=True, nullable=False)
+	english_name = db.Column(db.String(), unique=True, nullable=False)
 	language = db.Column(db.String(), unique=True, nullable=False)
 
 class Country (db.Model):

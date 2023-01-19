@@ -1,6 +1,8 @@
 from app import app
 from models import Country, db, Language, User
 
+# List of countries supported by the API as of January 19, 2023 in format:
+# 	(2-character-code, country in English)
 API_SUPPORTED_COUNTRIES = [
 	('ar', 'Argentina'), ('am', 'Armenia'), ('au', 'Australia'),
 	('at', 'Austria'), ('by', 'Belarus'), ('be', 'Belgium'),
@@ -23,11 +25,13 @@ API_SUPPORTED_COUNTRIES = [
 	('uy', 'Uruguay'), ('ve', 'Venezuela')
 ]
 
+# List of languages supported by the API as of January 19, 2023 in format:
+# 	(2-character-code, English name, language)
 API_SUPPORTED_LANGUAGES = [
 	('ar', 'Arabic', 'عربي'), ('bg', 'Bulgarian', 'български'),
-	('bn', 'Bengali'), ('cs', 'Czech', 'čeština'),
+	('bn', 'Bengali', 'বাংলা'), ('cs', 'Czech', 'čeština'),
 	('da', 'Danish', 'dansk'), ('de', 'German', 'Deutsch'),
-	('el', 'Greek, Modern', 'Ελληνικά'), ('en', 'English'),
+	('el', 'Greek', 'Ελληνικά'), ('en', 'English', 'English'),
 	('es', 'Spanish', 'Español'), ('et', 'Estonian', 'eesti keel'),
 	('fa', 'Persian', 'فارسی'), ('fi', 'Finnish', 'Suomalainen'),
 	('fr', 'French', 'Français'), ('he', 'Hebrew', 'עִברִית'),
@@ -35,12 +39,28 @@ API_SUPPORTED_LANGUAGES = [
 	('hu', 'Hungarian', 'Magyar'), ('id', 'Indonesian', 'bahasa Indonesia'),
 	('it', 'Italian', 'Italiano'), ('ja', 'Japanese', '日本語'),
 	('ko', 'Korean', '한국인'), ('lt', 'Lithuanian', 'lietuvių'),
-	('multi'), ('nl', 'Dutch', 'Nederlands'),
-	('no', 'Norwegian', 'norsk'), ('pl', 'Polish', 'Polski'),
-	('pt', 'Portuguese', 'Português'), ('ro', 'Romanian', 'Română'),
-	('ru', 'Russian', 'Русский'), ('sk', 'Slovak', 'slovenský'),
-	('sv', 'Swedish', 'svenska'), ('ta', 'Tamil', 'தமிழ்'),
-	('th', 'Thai', 'แบบไทย'), ('tr', 'Turkish', 'Türk'),
-	('uk', 'Ukrainian', 'українська'), ('vi', 'Vietnamese', 'Tiếng Việt'),
-	('zh', 'Chinese', '中国人')
+	('nl', 'Dutch', 'Nederlands'), ('no', 'Norwegian', 'norsk'),
+	('pl', 'Polish', 'Polski'), ('pt', 'Portuguese', 'Português'),
+	('ro', 'Romanian', 'Română'), ('ru', 'Russian', 'Русский'),
+	('sk', 'Slovak', 'slovenský'), ('sv', 'Swedish', 'svenska'),
+	('ta', 'Tamil', 'தமிழ்'), ('th', 'Thai', 'แบบไทย'),
+	('tr', 'Turkish', 'Türk'), ('uk', 'Ukrainian', 'українська'),
+	('vi', 'Vietnamese', 'Tiếng Việt'), ('zh', 'Chinese', '中国人')
 ]
+
+with app.app_context():
+	db.init_app(app)
+
+	for country in API_SUPPORTED_COUNTRIES:
+		new_country = Country(code=country[0], country=country[1])
+		db.session.add(new_country)
+	
+	for lang in API_SUPPORTED_LANGUAGES:
+		new_lang = Language(
+			code=lang[0],
+			english_name=lang[1],
+			language=lang[2]
+		)
+		db.session.add(new_lang)
+	
+	db.session.commit()
