@@ -1,5 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -27,3 +27,19 @@ class User (db.Model):
 		if user and bcrypt.check_password_hash(user.password, password):
 			return user
 		return False
+
+class Language (db.Model):
+	"""SQLAlchemy Language Model"""
+
+	__tablename__ = 'languages'
+	id = db.Column(db.Integer(), primary_key=True)
+	code = db.Column(db.String(2), unique=True, nullable=False)
+	language = db.Column(db.String(), unique=True, nullable=False)
+
+class Country (db.Model):
+	"""SQLAlchemy Country Model"""
+
+	__tablename__ = 'countries'
+	id = db.Column(db.Integer(), primary_key=True)
+	code = db.Column(db.String(2), unique=True, nullable=False)
+	country = db.Column(db.String(), unique=True, nullable=False)
