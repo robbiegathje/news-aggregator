@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Top Stories for {{g.user.username}}{% endblock %}
+
+{% block content %}
+	<h2>Top Stories</h2>
+	<form action="/logout" method="POST">
+		<input type="submit" value="Logout">
+	</form>
+{% endblock %}
