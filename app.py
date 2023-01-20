@@ -1,6 +1,6 @@
 from flask import flash, Flask, g, redirect, render_template, session
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import LoginForm
+from forms import LoginForm, RegistrationForm
 from models import Country, db, Language, User
 from secret import SECRET_KEY
 
@@ -50,6 +50,32 @@ def login():
 			flash(f'Welcome back {user.username}!')
 			return redirect('/top-stories')
 	return render_template('users/login.html', form=form)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+	form = RegistrationForm()
+	form.languages.choices = [
+		(lang.code, lang.language) for lang in Language.query.all()
+	]
+	form.countries.choices = [
+		(country.code, country.country) for country in Country.query.all()
+	]
+	if form.validate_on_submit():
+		user = User.register(
+			username=form.username.data,
+			password=form.password.data
+		)
+		db.session.add(user)
+		db.session.commit()
+		if user:
+			do_login(user)
+			user.add_new_languages(form.languages.data)
+			user.add_new_countries(form.countries.data)
+			db.session.add(user)
+			db.session.commit()
+			flash(f'Welcome {user.username}!')
+			return redirect('/top-stories')
+	return render_template('users/register.html', form=form)
 
 @app.route('/logout', methods=['POST'])
 def logout():

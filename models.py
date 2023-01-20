@@ -29,6 +29,16 @@ class User (db.Model):
 		if user and bcrypt.check_password_hash(user.password, password):
 			return user
 		return False
+	
+	def add_new_languages(self, language_code_list):
+		for language_code in language_code_list:
+			language = Language.query.filter_by(code=language_code).first()
+			self.languages.append(language)
+
+	def add_new_countries(self, country_code_list):
+		for country_code in country_code_list:
+			country = Country.query.filter_by(code=country_code).first()
+			self.countries.append(country)
 
 class Language (db.Model):
 	"""SQLAlchemy Language Model"""
