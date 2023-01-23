@@ -1,9 +1,12 @@
-from flask import flash, Flask, g, redirect, render_template, session
+from flask import flash, Flask, g, redirect, render_template, request, session
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import LoginForm, RegistrationForm
 from models import Country, db, Language, User
-from secret import SECRET_KEY
+from secret import API_TOKEN, SECRET_KEY
 
+import requests
+
+API_BASE_URL = 'https://api.thenewsapi.com/v1/news'
 CURR_USER_KEY = 'current_user'
 
 app = Flask(__name__)
@@ -90,3 +93,16 @@ def show_top_stories():
 		flash('Please login to continue.', 'danger')
 		return redirect('/login')
 	return render_template('news/top-stories.html')
+
+
+# API
+@app.route('/api/top-stories')
+def get_top_stories():
+	query_data = {
+		'api_token': API_TOKEN,
+		'language': request.args['language'],
+		'locale': request.args['locale'] if 'locale' in request.args else None,
+		'page': request.args['page'] if 'page' in request.args else 1
+	}
+	news_api_response = requests.get(f'{API_BASE_URL}/top', params=query_data)
+	return news_api_response.json()
