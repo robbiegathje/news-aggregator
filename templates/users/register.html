@@ -4,55 +4,65 @@
 
 {% block content %}
 	<div class="full-screen-background-image p-5">
-		<div class="container bg-white border border-dark-subtle rounded-5">
-			<h2 class="display-2 row mx-3">Register</h2>
-			<div class="row mb-3 mx-3 text-secondary">
-				<aside>
-					Already have an account? Login <a href="/login">here!</a>
-				</aside>
+		<div class="container">
+			<div class="row justify-content-start">
+				<div class="col-6">
+					<div class="container bg-white border border-dark-subtle rounded-5">
+						<div class="row mx-1">
+							<h2 class="display-5">Register</h2>
+						</div>
+						<div class="row mb-3 mx-3 text-secondary">
+							<aside>
+								Already have an account? Login
+								<a href="/login">here</a>!
+							</aside>
+						</div>
+						<form action="/register" method="POST">
+							{{ form.csrf_token }}
+							<div class="row mb-3 mx-3">
+								{{ form.username.label(class_='form-label') }}
+								{{ form.username(class_='form-control') }}
+								<div class="form-text">
+									Username must be 4-20 characters.
+								</div>
+							</div>
+							<div class="row mb-3 mx-3">
+								{{ form.password.label(class_='form-label') }}
+								{{ form.password(class_='form-control') }}
+								<div class="form-text">
+									Password must be at least 8 characters.
+								</div>
+							</div>
+							<div class="row mb-3 mx-3">
+								{{ form.languages.label(class_='form-label') }}
+								{{ form.languages(class_='form-control') }}
+								<div class="form-text">
+									Please choose at least one language.
+									ctrl+click on Windows or
+									cmd+click on MacOS to select more than one.
+								</div>
+							</div>
+							<div class="row mb-3 mx-3">
+								{{ form.countries.label(class_='form-label') }}
+								{{ form.countries(class_='form-control') }}
+								<div class="form-text">
+									Please choose at least one country
+									to receive news for.
+									If none are selected, you will receive
+									global news in your language.
+									ctrl+click on Windows or
+									cmd+click on MacOS to select more than one.
+								</div>
+							</div>
+							<div class="row mb-3 mx-3">
+								<input class="btn btn-lg btn-outline-success"
+									type="submit"
+									value="Register">
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
-			<form action="/register" method="POST">
-				{{ form.csrf_token }}
-				<div class="row mb-3 mx-3">
-					{{ form.username.label(class_='form-label') }}
-					{{ form.username(class_='form-control') }}
-					<div class="form-text">
-						Username must be 4-20 characters.
-					</div>
-				</div>
-				<div class="row mb-3 mx-3">
-					{{ form.password.label(class_='form-label') }}
-					{{ form.password(class_='form-control') }}
-					<div class="form-text">
-						Password must be at least 8 characters.
-					</div>
-				</div>
-				<div class="row mb-3 mx-3">
-					{{ form.languages.label(class_='form-label') }}
-					{{ form.languages(class_='form-control') }}
-					<div class="form-text">
-						Please choose at least one language.
-						ctrl+click on Windows or
-						cmd+click on MacOS to select more than one.
-					</div>
-				</div>
-				<div class="row mb-3 mx-3">
-					{{ form.countries.label(class_='form-label') }}
-					{{ form.countries(class_='form-control') }}
-					<div class="form-text">
-						Please choose at least one country to receive news for.
-						If none are selected, you will receive global
-						news in your language.
-						ctrl+click on Windows or
-						cmd+click on MacOS to select more than one.
-					</div>
-				</div>
-				<div class="row mb-3 mx-3">
-					<input class="btn btn-lg btn-outline-success"
-						type="submit"
-						value="Register">
-				</div>
-			</form>
 		</div>
 	</div>
 {% endblock %}

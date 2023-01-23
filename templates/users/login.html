@@ -4,29 +4,38 @@
 
 {% block content %}
 	<div class="full-screen-background-image p-5">
-		<div class="container bg-white border border-dark-subtle rounded-5">
-			<h2 class="display-2 row mx-3">Login</h2>
-			<div class="row mb-3 mx-3 text-secondary">
-				<aside>
-					Need an account? Register <a href="/register">here!</a>
-				</aside>
+		<div class="container">
+			<div class="row justify-content-start">
+				<div class="col-6">
+					<div class="container bg-white border border-dark-subtle rounded-5">
+						<div class="row mx-1">
+							<h2 class="display-5">Login</h2>
+						</div>
+						<div class="row mb-3 mx-3 text-secondary">
+							<aside>
+								Need an account? Register
+								<a href="/register">here</a>!
+							</aside>
+						</div>
+						<form action="/login" method="POST">
+							{{ form.csrf_token }}
+							<div class="row mb-3 mx-3">
+								{{ form.username.label(class_='form-label') }}
+								{{ form.username(class_='form-control') }}
+							</div>
+							<div class="row mb-3 mx-3">
+								{{ form.password.label(class_='form-label') }}
+								{{ form.password(class_='form-control') }}
+							</div>
+							<div class="row mb-3 mx-3">
+								<input class="btn btn-lg btn-outline-success"
+									type="submit"
+									value="Login">
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
-			<form action="/login" method="POST">
-				{{ form.csrf_token }}
-				<div class="row mb-3 mx-3">
-					{{ form.username.label(class_='form-label') }}
-					{{ form.username(class_='form-control') }}
-				</div>
-				<div class="row mb-3 mx-3">
-					{{ form.password.label(class_='form-label') }}
-					{{ form.password(class_='form-control') }}
-				</div>
-				<div class="row mb-3 mx-3">
-					<input class="btn btn-lg btn-outline-success"
-						type="submit"
-						value="Login">
-				</div>
-			</form>
 		</div>
 	</div>
 {% endblock %}
