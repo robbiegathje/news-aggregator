@@ -47,7 +47,7 @@ def login():
 		)
 		if user:
 			do_login(user)
-			flash(f'Welcome back {user.username}!')
+			flash(f'Welcome back {user.username}!', 'success')
 			return redirect('/top-stories')
 	return render_template('users/login.html', form=form)
 
@@ -73,7 +73,7 @@ def register():
 			user.add_new_countries(form.countries.data)
 			db.session.add(user)
 			db.session.commit()
-			flash(f'Welcome {user.username}!')
+			flash(f'Welcome {user.username}!', 'success')
 			return redirect('/top-stories')
 	return render_template('users/register.html', form=form)
 
@@ -81,12 +81,12 @@ def register():
 def logout():
 	if g.user:
 		do_logout()
-		flash(f'Logged out {g.user.username}')
+		flash(f'Logged out {g.user.username}', 'success')
 	return redirect('/login')
 
 @app.route('/top-stories', methods=['GET'])
 def show_top_stories():
 	if not g.user:
-		flash('Please login to continue.')
+		flash('Please login to continue.', 'danger')
 		return redirect('/login')
 	return render_template('news/top-stories.html')

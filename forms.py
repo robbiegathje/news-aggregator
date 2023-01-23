@@ -20,5 +20,5 @@ class RegistrationForm (FlaskForm):
 		'Password',
 		validators=[InputRequired(), Length(min=8)]
 	)
-	languages = SelectMultipleField('Languages')
+	languages = SelectMultipleField('Languages', validators=[InputRequired()])
 	countries = SelectMultipleField('Countries')

@@ -3,8 +3,10 @@
 {% block title %}Top Stories for {{g.user.username}}{% endblock %}
 
 {% block content %}
-	<h2>Top Stories</h2>
-	<form action="/logout" method="POST">
-		<input type="submit" value="Logout">
-	</form>
+	<div class="container bg-white border border-dark-subtle rounded-5">
+		<h2 class="display-2 row mx-3">Top Stories</h2>
+		<form action="/logout" method="POST">
+			<input type="submit" value="Logout">
+		</form>
+	</div>
 {% endblock %}

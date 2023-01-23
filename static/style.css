@@ -1,0 +1,5 @@
+.full-screen-background-image {
+	width: 100vw;
+	height: 100vh;
+	background-image: url(/static/login-and-register-background.jpeg);
+}

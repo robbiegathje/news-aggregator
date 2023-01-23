@@ -5,13 +5,32 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{% block title %}{% endblock %}</title>
+	<link
+		href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+		rel="stylesheet"
+		integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+		crossorigin="anonymous">
+	<link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-	<h1>News Aggregator</h1>
+	<nav class="navbar">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">News Aggregator</a>
+			<div class="navbar-nav">
+				<a class="nav-link" href="/top-stories">Top Stories</a>
+			</div>
+		</div>
+	</nav>
 	{% for category, message in get_flashed_messages(with_categories=True) %}
-		<p>{{message}}</p>
+		<div class="alert alert-{{category}} mx-3" role="alert">
+			{{message}}
+		</div>
 	{% endfor %}
 	{% block content %}
 	{% endblock %}
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+		crossorigin="anonymous"></script>
 </body>
 </html>
