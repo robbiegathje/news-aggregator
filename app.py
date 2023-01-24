@@ -116,9 +116,9 @@ def show_top_stories():
 def get_top_stories():
 	query_data = build_api_query_data_dict(
 		request.args,
-		'language',
-		'locale',
-		'page'
+		API_LANGUAGE_KEY,
+		API_LOCALE_KEY,
+		API_PAGE_NUMBER_KEY
 	)
 	news_api_response = requests.get(f'{API_BASE_URL}/top', params=query_data)
 	return news_api_response.json()
@@ -127,8 +127,8 @@ def get_top_stories():
 def get_all_stories():
 	query_data = build_api_query_data_dict(
 		request.args,
-		'language',
-		'page',
+		API_LANGUAGE_KEY,
+		API_PAGE_NUMBER_KEY,
 		NUM_OF_DAYS_FOR_SEARCH_KEY
 	)
 	news_api_response = requests.get(f'{API_BASE_URL}/all', params=query_data)
@@ -138,10 +138,10 @@ def get_all_stories():
 def get_stories_by_search_term():
 	query_data = build_api_query_data_dict(
 		request.args,
-		'search',
-		'language',
-		'locale',
-		'page',
+		API_SEARCH_TERM_KEY,
+		API_LANGUAGE_KEY,
+		API_LOCALE_KEY,
+		API_PAGE_NUMBER_KEY,
 		NUM_OF_DAYS_FOR_SEARCH_KEY
 	)
 	news_api_response = requests.get(f'{API_BASE_URL}/top', params=query_data)

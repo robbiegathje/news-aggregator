@@ -1,4 +1,17 @@
+"""
+Constants for News Aggregator App
+All references to 'API' are references to
+The News API at https://www.thenewsapi.com/
+"""
+
 API_BASE_URL = 'https://api.thenewsapi.com/v1/news'
+API_DATE_STRING_FORMAT = '%Y-%m-%d'
+API_LANGUAGE_KEY = 'language'
+API_LOCALE_KEY = 'locale'
+API_PAGE_NUMBER_KEY = 'page'
+API_PUBLISHED_AFTER_DATE_KEY = 'published_after'
+API_SEARCH_TERM_KEY = 'search'
+API_TOKEN_KEY = 'api_token'
 CURR_USER_KEY = 'current_user'
 FLASH_DANGER_CATEGORY = 'danger'
 FLASH_SUCCESS_CATEGORY = 'success'
