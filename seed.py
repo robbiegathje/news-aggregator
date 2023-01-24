@@ -3,6 +3,7 @@ from models import Country, db, Language, User
 
 # List of countries supported by the API as of January 19, 2023 in format:
 # 	(2-character-code, country in English)
+# Found here: https://www.thenewsapi.com/documentation
 API_SUPPORTED_COUNTRIES = [
 	('ar', 'Argentina'), ('am', 'Armenia'), ('au', 'Australia'),
 	('at', 'Austria'), ('by', 'Belarus'), ('be', 'Belgium'),
@@ -27,6 +28,7 @@ API_SUPPORTED_COUNTRIES = [
 
 # List of languages supported by the API as of January 19, 2023 in format:
 # 	(2-character-code, English name, language)
+# Found here: https://www.thenewsapi.com/documentation
 API_SUPPORTED_LANGUAGES = [
 	('ar', 'Arabic', 'عربي'), ('bg', 'Bulgarian', 'български'),
 	('bn', 'Bengali', 'বাংলা'), ('cs', 'Czech', 'čeština'),

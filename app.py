@@ -8,6 +8,12 @@ import requests
 
 API_BASE_URL = 'https://api.thenewsapi.com/v1/news'
 CURR_USER_KEY = 'current_user'
+FLASH_DANGER_CATEGORY = 'danger'
+FLASH_SUCCESS_CATEGORY = 'success'
+LOGOUT_MESSAGE = 'Successfully logged out {username}.'
+NEED_TO_LOGIN_AUTH_MESSAGE = 'Please login to continue.'
+WELCOME_NEW_USER_MESSAGE = 'Welcome {username}!'
+WELCOME_RETURNING_USER_MESSAGE = 'Welcome back {username}!'
 
 app = Flask(__name__)
 
@@ -20,10 +26,10 @@ toolbar = DebugToolbarExtension(app)
 with app.app_context():
 	db.init_app(app)
 
-def do_login(user):
+def add_user_id_to_session(user):
 	session[CURR_USER_KEY] = user.id
 
-def do_logout():
+def remove_user_id_from_session():
 	if CURR_USER_KEY in session:
 		del session[CURR_USER_KEY]
 
@@ -35,7 +41,14 @@ def add_logged_in_user_to_g():
 		g.user = None
 
 @app.route('/', methods=['GET'])
-def properly_redirect():
+def show_home_experience():
+	"""
+	If user is logged in, user is immediately redirected to the
+	top stories page, which acts as the site's homepage.
+	However, user is redirected to the login page when they are not logged in.
+	Thus, the 'home experience' is different for logged in user
+	than logged out user.
+	"""
 	if g.user:
 		return redirect('/top-stories')
 	return redirect('/login')
@@ -49,8 +62,11 @@ def login():
 			password=form.password.data
 		)
 		if user:
-			do_login(user)
-			flash(f'Welcome back {user.username}!', 'success')
+			add_user_id_to_session(user)
+			flash(
+				WELCOME_RETURNING_USER_MESSAGE.format(username=user.username),
+				FLASH_SUCCESS_CATEGORY
+			)
 			return redirect('/top-stories')
 	return render_template('users/login.html', form=form)
 
@@ -64,6 +80,7 @@ def register():
 		(country.code, country.country) for country in Country.query.all()
 	]
 	if form.validate_on_submit():
+		# needs refactor
 		user = User.register(
 			username=form.username.data,
 			password=form.password.data
@@ -71,26 +88,32 @@ def register():
 		db.session.add(user)
 		db.session.commit()
 		if user:
-			do_login(user)
+			add_user_id_to_session(user)
 			user.add_new_languages(form.languages.data)
 			user.add_new_countries(form.countries.data)
 			db.session.add(user)
 			db.session.commit()
-			flash(f'Welcome {user.username}!', 'success')
+			flash(
+				WELCOME_NEW_USER_MESSAGE.format(username=user.username),
+				FLASH_SUCCESS_CATEGORY
+			)
 			return redirect('/top-stories')
 	return render_template('users/register.html', form=form)
 
 @app.route('/logout', methods=['POST'])
 def logout():
 	if g.user:
-		do_logout()
-		flash(f'Logged out {g.user.username}', 'success')
+		remove_user_id_from_session()
+		flash(
+			LOGOUT_MESSAGE.format(username=g.user.username),
+			FLASH_SUCCESS_CATEGORY
+		)
 	return redirect('/login')
 
 @app.route('/top-stories', methods=['GET'])
 def show_top_stories():
 	if not g.user:
-		flash('Please login to continue.', 'danger')
+		flash(NEED_TO_LOGIN_AUTH_MESSAGE, FLASH_DANGER_CATEGORY)
 		return redirect('/login')
 	return render_template('news/top-stories.html')
 
