@@ -106,3 +106,26 @@ def get_top_stories():
 	}
 	news_api_response = requests.get(f'{API_BASE_URL}/top', params=query_data)
 	return news_api_response.json()
+
+@app.route('/api/all-stories')
+def get_all_stories():
+	query_data = {
+		'api_token': API_TOKEN,
+		'language': request.args['language'],
+		'page': request.args['page'] if 'page' in request.args else 1
+	}
+	news_api_response = requests.get(f'{API_BASE_URL}/all', params=query_data)
+	return news_api_response.json()
+
+@app.route('/api/search')
+def get_stories_by_search_term():
+	query_data = {
+		'api_token': API_TOKEN,
+		'search': request.args['search'] if 'search' in request.args else None,
+		'language': request.args['language'],
+		'locale': request.args['locale'] if 'locale' in request.args else None,
+		'page': request.args['page'] if 'page' in request.args else 1,
+		# 'published_after': 'today - x number of days' (IMPLEMENT THIS)
+	}
+	news_api_response = requests.get(f'{API_BASE_URL}/top', params=query_data)
+	return news_api_response.json()
