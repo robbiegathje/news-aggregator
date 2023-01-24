@@ -1,19 +1,12 @@
+from constants import *
 from flask import flash, Flask, g, redirect, render_template, request, session
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import LoginForm, RegistrationForm
+from helpers import build_api_query_data_dict
 from models import Country, db, Language, User
-from secret import API_TOKEN, SECRET_KEY
+from secret import SECRET_KEY
 
 import requests
-
-API_BASE_URL = 'https://api.thenewsapi.com/v1/news'
-CURR_USER_KEY = 'current_user'
-FLASH_DANGER_CATEGORY = 'danger'
-FLASH_SUCCESS_CATEGORY = 'success'
-LOGOUT_MESSAGE = 'Successfully logged out {username}.'
-NEED_TO_LOGIN_AUTH_MESSAGE = 'Please login to continue.'
-WELCOME_NEW_USER_MESSAGE = 'Welcome {username}!'
-WELCOME_RETURNING_USER_MESSAGE = 'Welcome back {username}!'
 
 app = Flask(__name__)
 
@@ -121,34 +114,35 @@ def show_top_stories():
 # API
 @app.route('/api/top-stories')
 def get_top_stories():
-	query_data = {
-		'api_token': API_TOKEN,
-		'language': request.args['language'],
-		'locale': request.args['locale'] if 'locale' in request.args else None,
-		'page': request.args['page'] if 'page' in request.args else 1
-	}
+	query_data = build_api_query_data_dict(
+		request.args,
+		'language',
+		'locale',
+		'page'
+	)
 	news_api_response = requests.get(f'{API_BASE_URL}/top', params=query_data)
 	return news_api_response.json()
 
 @app.route('/api/all-stories')
 def get_all_stories():
-	query_data = {
-		'api_token': API_TOKEN,
-		'language': request.args['language'],
-		'page': request.args['page'] if 'page' in request.args else 1
-	}
+	query_data = build_api_query_data_dict(
+		request.args,
+		'language',
+		'page',
+		NUM_OF_DAYS_FOR_SEARCH_KEY
+	)
 	news_api_response = requests.get(f'{API_BASE_URL}/all', params=query_data)
 	return news_api_response.json()
 
 @app.route('/api/search')
 def get_stories_by_search_term():
-	query_data = {
-		'api_token': API_TOKEN,
-		'search': request.args['search'] if 'search' in request.args else None,
-		'language': request.args['language'],
-		'locale': request.args['locale'] if 'locale' in request.args else None,
-		'page': request.args['page'] if 'page' in request.args else 1,
-		# 'published_after': 'today - x number of days' (IMPLEMENT THIS)
-	}
+	query_data = build_api_query_data_dict(
+		request.args,
+		'search',
+		'language',
+		'locale',
+		'page',
+		NUM_OF_DAYS_FOR_SEARCH_KEY
+	)
 	news_api_response = requests.get(f'{API_BASE_URL}/top', params=query_data)
 	return news_api_response.json()
