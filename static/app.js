@@ -1,6 +1,3 @@
-console.log(userLanguageCodes);
-console.log(userCountryCodes);
-
 // Two variables are passed through to app.js from inline HTML scripts when
 // necessary for the page being displayed.
 // The variables are userLanguageCodes and userCountryCodes.
@@ -21,7 +18,7 @@ async function getTopStories(language, locale, page=1) {
 			page
 		}}
 	);
-	return response
+	return response;
 };
 
 async function getTopStoriesBySearchTerm(
@@ -37,7 +34,7 @@ async function getTopStoriesBySearchTerm(
 			page
 		}}
 	);
-	return response
+	return response;
 };
 
 async function getAllStories(language, page=1) {
@@ -48,7 +45,7 @@ async function getAllStories(language, page=1) {
 			page
 		}}
 	);
-	return response
+	return response;
 };
 
 async function getAllStoriesBySearchTerm(search, days, language, page=1) {
@@ -61,5 +58,40 @@ async function getAllStoriesBySearchTerm(search, days, language, page=1) {
 			page
 		}}
 	);
-	return response
+	return response;
+};
+
+function generateNewsArticleHTML(articleData) {
+	let containingBootstrapColumn = document.createElement('div');
+	containingBootstrapColumn.className = 'col-4';
+	let articleCard = document.createElement('div');
+	articleCard.className = 'card';
+	let cardImage = document.createElement('img');
+	cardImage.src = articleData.image_url;
+	cardImage.className = 'card-img-top';
+	let cardBody = document.createElement('div');
+	cardBody.className = 'card-body';
+	let cardTitle = document.createElement('h5');
+	cardTitle.innerText = articleData.title;
+	cardTitle.className = 'card-title';
+	let cardText = document.createElement('p');
+	cardText.innerText = articleData.description;
+	cardText.className = 'card-text';
+	let cardSource = document.createElement('a');
+	cardSource.href = articleData.url;
+	cardSource.innerText = articleData.source;
+	cardSource.className = 'btn btn-primary';
+	cardBody.append(cardTitle);
+	cardBody.append(cardText);
+	cardBody.append(cardSource);
+	articleCard.append(cardImage);
+	articleCard.append(cardBody);
+	containingBootstrapColumn.append(articleCard)
+	return containingBootstrapColumn;
+};
+
+function appendAllNewsArticles(articleCardCollection, DOMContainer) {
+	for (let articleHTML of articleCardCollection) {
+		DOMContainer.append(articleHTML);
+	};
 };

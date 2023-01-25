@@ -3,7 +3,7 @@
 {% block title %}Top Stories for {{g.user.username}}{% endblock %}
 
 {% block content %}
-	<div class="container bg-white border border-dark-subtle rounded-5">
+	<div class="container bg-white border border-dark-subtle rounded-5 p-3">
 		<div class="row mx-3">
 			<h2 class="display-2">Top Stories</h2>
 		</div>
@@ -32,6 +32,7 @@
 		<form action="/logout" method="POST">
 			<input type="submit" value="Logout">
 		</form>
+		<div class="row" id="stories"></div>
 	</div>
 	<script>
 		let userLanguageCodes = [];
