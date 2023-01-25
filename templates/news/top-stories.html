@@ -4,9 +4,49 @@
 
 {% block content %}
 	<div class="container bg-white border border-dark-subtle rounded-5">
-		<h2 class="display-2 row mx-3">Top Stories</h2>
+		<div class="row mx-3">
+			<h2 class="display-2">Top Stories</h2>
+		</div>
+		<div class="row mb-3 mx-3 text-secondary">
+			<aside>
+				Selected Countries:
+				{% for country in g.user.countries %}
+					{% if country == g.user.countries[-1] %}
+						{{country.country}}
+					{% else %}
+						{{country.country}} |
+					{% endif %}
+				{% endfor %}
+			</aside>
+			<aside>
+				Languages:
+				{% for language in g.user.languages %}
+					{% if language == g.user.languages[-1] %}
+						{{language.language}}
+					{% else %}
+						{{language.language}} |
+					{% endif %}
+				{% endfor %}
+			</aside>
+		</div>
 		<form action="/logout" method="POST">
 			<input type="submit" value="Logout">
 		</form>
 	</div>
+	<script>
+		let userLanguageCodes = [];
+	</script>
+	{% for language in g.user.languages %}
+		<script>
+			userLanguageCodes.push('{{language.code}}');
+		</script>
+	{% endfor %}
+	<script>
+		let userCountryCodes = [];
+	</script>
+	{% for country in g.user.countries %}
+		<script>
+			userCountryCodes.push('{{country.code}}');
+		</script>
+	{% endfor %}
 {% endblock %}
