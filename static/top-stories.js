@@ -7,6 +7,7 @@
 // directly from the database such that user preferences are always current.
 
 STORIES_CONTAINER = document.getElementById('stories');
+LOADING_CONTAINER = document.getElementById('loading');
 
 document.addEventListener('DOMContentLoaded', async function() {
 	response = await getTopStories(
@@ -17,5 +18,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 		articleCard = generateNewsArticleHTML(articleData);
 		articleCardCollection.push(articleCard);
 	};
+	LOADING_CONTAINER.style.display = 'None';
 	appendAllNewsArticles(articleCardCollection, STORIES_CONTAINER);
 });
