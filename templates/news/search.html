@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+	<div class="container bg-white border border-dark-subtle rounded-5 p-3">
+		<div class="row mx-3">
+			<h2 class="display-2">Search</h2>
+		</div>
+		<form id="search-form">
+			<div class="row mb-3">
+				<label
+					for="search-term"
+					class="col-1 col-form-label">
+					Search:
+				</label>
+				<div class="col-10">
+					<input
+						type="text"
+						name="search"
+						class="form-control"
+						id="search-term">
+				</div>
+				<div class="col-1">
+					<input type="submit" value="Go!" class="btn btn-primary">
+				</div>
+			</div>
+		</form>
+		<div
+			class="row mb-3 mx-3 text-secondary"
+			id="user-search-settings"
+			style="display: none;">
+			<aside>
+				Selected Countries:
+				{% for country in g.user.countries %}
+					{% if country == g.user.countries[-1] %}
+						{{country.country}}
+					{% else %}
+						{{country.country}} |
+					{% endif %}
+				{% endfor %}
+			</aside>
+			<aside>
+				Languages:
+				{% for language in g.user.languages %}
+					{% if language == g.user.languages[-1] %}
+						{{language.language}}
+					{% else %}
+						{{language.language}} |
+					{% endif %}
+				{% endfor %}
+			</aside>
+		</div>
+		<div
+			class="row justify-content-center text-center"
+			id="loading"
+			style="display: none;">
+			<div class="col-4">
+				<h5 class="display-5">Loading</h5>
+				<i class="fa-solid fa-spinner fa-spin"></i>
+			</div>
+		</div>
+		<div class="row" id="stories"></div>
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script>
+		let userLanguageCodes = [];
+	</script>
+	{% for language in g.user.languages %}
+		<script>
+			userLanguageCodes.push('{{language.code}}');
+		</script>
+	{% endfor %}
+	<script>
+		let userCountryCodes = [];
+	</script>
+	{% for country in g.user.countries %}
+		<script>
+			userCountryCodes.push('{{country.code}}');
+		</script>
+	{% endfor %}
+	<script src="/static/search.js"></script>
+{% endblock %}

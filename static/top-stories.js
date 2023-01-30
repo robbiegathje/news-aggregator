@@ -6,16 +6,16 @@
 // the originating scripts that utilize back-end user data
 // directly from the database such that user preferences are always current.
 
-STORIES_CONTAINER = document.getElementById('stories');
-LOADING_CONTAINER = document.getElementById('loading');
-
 document.addEventListener('DOMContentLoaded', async function() {
-	response = await getTopStories(
+	const LOADING_CONTAINER = document.getElementById('loading');
+	const STORIES_CONTAINER = document.getElementById('stories');
+
+	let response = await getTopStories(
 		userLanguageCodes.join(','), userCountryCodes.join(',')
 	);
-	articleCardCollection = [];
+	let articleCardCollection = [];
 	for (let articleData of response.data.data) {
-		articleCard = generateNewsArticleHTML(articleData);
+		let articleCard = generateNewsArticleHTML(articleData);
 		articleCardCollection.push(articleCard);
 	};
 	LOADING_CONTAINER.style.display = 'None';

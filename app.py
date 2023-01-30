@@ -110,6 +110,13 @@ def show_top_stories():
 		return redirect('/login')
 	return render_template('news/top-stories.html')
 
+@app.route('/search', methods=['GET'])
+def search():
+	if not g.user:
+		flash(NEED_TO_LOGIN_AUTH_MESSAGE, FLASH_DANGER_CATEGORY)
+		return redirect('/login')
+	return render_template('news/search.html')
+
 
 # API
 @app.route('/api/top-stories')
