@@ -1,3 +1,5 @@
+const ARTICLE_CARD_LINK_TEXT = 'Read More';
+
 // The parameters for getTopStories() are based on the query string expectations
 // of the internal API. The same is true for other "getStories" functions below.
 async function getTopStories(language, locale, page=1) {
@@ -65,16 +67,20 @@ function generateNewsArticleHTML(articleData) {
 	let cardTitle = document.createElement('h5');
 	cardTitle.innerText = articleData.title;
 	cardTitle.className = 'card-title';
+	let cardSourceSubtitle = document.createElement('h6');
+	cardSourceSubtitle.innerText = articleData.source;
+	cardSourceSubtitle.className = 'card-subtitle text-secondary';
 	let cardText = document.createElement('p');
 	cardText.innerText = articleData.description;
 	cardText.className = 'card-text';
-	let cardSource = document.createElement('a');
-	cardSource.href = articleData.url;
-	cardSource.innerText = articleData.source;
-	cardSource.className = 'btn btn-primary';
+	let cardSourceLink = document.createElement('a');
+	cardSourceLink.href = articleData.url;
+	cardSourceLink.innerText = ARTICLE_CARD_LINK_TEXT;
+	cardSourceLink.className = 'btn btn-primary';
 	cardBody.append(cardTitle);
+	cardBody.append(cardSourceSubtitle);
 	cardBody.append(cardText);
-	cardBody.append(cardSource);
+	cardBody.append(cardSourceLink);
 	articleCard.append(cardImage);
 	articleCard.append(cardBody);
 	containingBootstrapColumn.append(articleCard)
