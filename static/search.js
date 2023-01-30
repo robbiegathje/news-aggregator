@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	const LOADING_CONTAINER = document.getElementById('loading');
 	const SEARCH_FORM = document.getElementById('search-form');
 	const SEARCH_TERM_INPUT = document.getElementById('search-term');
+	const SEARCH_TIMEFRAME_INPUT = document.getElementById('search-days');
 	const STORIES_CONTAINER = document.getElementById('stories');
 	const USER_SEARCH_SETTINGS = document.getElementById(
 		'user-search-settings'
@@ -21,9 +22,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 		LOADING_CONTAINER.style.display = '';
 		STORIES_CONTAINER.innerText = '';
 		let searchTerm = SEARCH_TERM_INPUT.value;
+		let searchTimeframe = SEARCH_TIMEFRAME_INPUT.value;
 		let response = await getTopStoriesBySearchTerm(
 			searchTerm,
-			7,
+			searchTimeframe,
 			userLanguageCodes.join(','),
 			userCountryCodes.join(',')
 		);
