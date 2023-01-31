@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit User Preferences{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<div class="row justify-content-start">
+			<div class="col-6">
+				<div class="container bg-white border border-dark-subtle rounded-5">
+					<div class="row mx-1">
+						<h2 class="display-5">
+							{{g.user.username}} User Preferences
+						</h2>
+					</div>
+					<form
+						action="/users/{{g.user.username}}/edit"
+						method="POST">
+						{{ form.csrf_token }}
+						<div class="row mb-3 mx-3">
+							{{ form.languages.label(class_='form-label') }}
+							{{ form.languages(class_='form-control') }}
+							<div class="form-text">
+								Please choose at least one language.
+								ctrl+click on Windows or
+								cmd+click on MacOS to select more than one.
+							</div>
+						</div>
+						<div class="row mb-3 mx-3">
+							{{ form.countries.label(class_='form-label') }}
+							{{ form.countries(class_='form-control') }}
+							<div class="form-text">
+								Please choose one or more countries
+								to receive news for.
+								If none are selected, you will receive
+								global news in your language.
+								ctrl+click on Windows or
+								cmd+click on MacOS to select more than one.
+							</div>
+						</div>
+						<div class="row mb-3 mx-3">
+							{{ form.password.label(class_='form-label') }}
+							{{ form.password(class_='form-control') }}
+							<div class="form-text">
+								Please confirm your password.
+							</div>
+						</div>
+						<div class="row mb-3 mx-3">
+							<input class="btn btn-outline-success mb-3"
+								type="submit"
+								value="Submit Changes">
+							<a
+								href="/top-stories"
+								class="btn btn-outline-danger mb-3">
+								Cancel
+							</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,5 +1,4 @@
 from flask_wtf import FlaskForm
-from models import Country, Language, User
 from wtforms import PasswordField, SelectMultipleField, StringField
 from wtforms.validators import InputRequired, Length
 
@@ -10,7 +9,7 @@ class LoginForm (FlaskForm):
 	password = PasswordField('Password', validators=[InputRequired()])
 
 class RegistrationForm (FlaskForm):
-	"""WTForms Login Form"""
+	"""WTForms Registration Form"""
 
 	username = StringField(
 		'Username',
@@ -22,3 +21,14 @@ class RegistrationForm (FlaskForm):
 	)
 	languages = SelectMultipleField('Languages', validators=[InputRequired()])
 	countries = SelectMultipleField('Countries')
+
+class UserPreferencesForm (FlaskForm):
+	"""WTForms User Preferences Form"""
+
+	languages = SelectMultipleField('Languages', validators=[InputRequired()])
+	countries = SelectMultipleField('Countries')
+
+	password = PasswordField(
+		'Confirm Password',
+		validators=[InputRequired()]
+	)
