@@ -1,7 +1,7 @@
 from constants import *
 from flask import flash, Flask, g, redirect, render_template, request, session
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import LoginForm, RegistrationForm, UserPreferencesForm
+from forms import LoginForm, PasswordChangeForm, RegistrationForm, UserPreferencesForm, UsernameChangeForm
 from helpers import build_api_query_data_dict
 from models import Country, db, Language, User
 from secret import SECRET_KEY
@@ -141,6 +141,64 @@ def edit_user_preferences(username):
 		)
 		return redirect('/top-stories')
 	return render_template('users/edit.html', form=form)
+
+@app.route('/users/<username>/change-username', methods=['GET', 'POST'])
+def change_username(username):
+	if not g.user:
+		flash(NEED_TO_LOGIN_AUTH_MESSAGE, FLASH_DANGER_CATEGORY)
+		return redirect('/login')
+	user_to_edit = User.query.filter_by(username=username).first()
+	if not g.user == user_to_edit:
+		flash(
+			INCORRECT_USER_AUTH_MESSAGE.format(username=g.user.username),
+			FLASH_DANGER_CATEGORY
+		)
+		return redirect('/top-stories')
+	form = UsernameChangeForm()
+	if form.validate_on_submit() and User.authenticate(
+		username=g.user.username,
+		password=form.password.data
+	):
+		g.user.username = form.username.data
+		db.session.add(g.user)
+		db.session.commit()
+		flash(
+			USER_EDIT_SUCCESS_MESSAGE.format(username=g.user.username),
+			FLASH_SUCCESS_CATEGORY
+		)
+		return redirect('/top-stories')
+	return render_template('users/change-username.html', form=form)
+
+@app.route('/users/<username>/change-password', methods=['GET', 'POST'])
+def change_password(username):
+	if not g.user:
+		flash(NEED_TO_LOGIN_AUTH_MESSAGE, FLASH_DANGER_CATEGORY)
+		return redirect('/login')
+	user_to_edit = User.query.filter_by(username=username).first()
+	if not g.user == user_to_edit:
+		flash(
+			INCORRECT_USER_AUTH_MESSAGE.format(username=g.user.username),
+			FLASH_DANGER_CATEGORY
+		)
+		return redirect('/top-stories')
+	form = PasswordChangeForm()
+	if form.validate_on_submit() and User.authenticate(
+		username=g.user.username,
+		password=form.current_password.data
+	):
+		if form.new_password.data == form.confirm_new_password.data:
+			g.user.change_password(form.new_password.data)
+			db.session.add(g.user)
+			db.session.commit()
+			flash(
+				USER_EDIT_SUCCESS_MESSAGE.format(username=g.user.username),
+				FLASH_SUCCESS_CATEGORY
+			)
+			return redirect('/top-stories')
+		else:
+			flash(UNCONFIRMED_NEW_PASSWORD_MESSAGE, FLASH_DANGER_CATEGORY)
+			return redirect(f'/users/{g.user.username}/change-password')
+	return render_template('users/change-password.html', form=form)
 
 @app.route('/top-stories', methods=['GET'])
 def show_top_stories():

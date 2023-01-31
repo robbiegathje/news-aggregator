@@ -32,3 +32,32 @@ class UserPreferencesForm (FlaskForm):
 		'Confirm Password',
 		validators=[InputRequired()]
 	)
+
+class UsernameChangeForm (FlaskForm):
+	"""WTForms Username Change Form"""
+
+	username = StringField(
+		'New Username',
+		validators=[InputRequired(), Length(min=4, max=20)]
+	)
+
+	password = PasswordField(
+		'Confirm Password',
+		validators=[InputRequired()]
+	)
+
+class PasswordChangeForm (FlaskForm):
+	"""WTForms Password Change Form"""
+
+	current_password = PasswordField(
+		'Current Password',
+		validators=[InputRequired()]
+	)
+	new_password = PasswordField(
+		'New Password',
+		validators=[InputRequired(), Length(min=8)]
+	)
+	confirm_new_password = PasswordField(
+		'Confirm New Password',
+		validators=[InputRequired()]
+	)

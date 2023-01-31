@@ -40,6 +40,11 @@ class User (db.Model):
 			country = Country.query.filter_by(code=country_code).first()
 			self.countries.append(country)
 
+	def change_password(self, new_password):
+		hashed = bcrypt.generate_password_hash(new_password)
+		hashed_utf8 = hashed.decode('utf8')
+		self.password = hashed_utf8
+
 class Language (db.Model):
 	"""SQLAlchemy Language Model"""
 
