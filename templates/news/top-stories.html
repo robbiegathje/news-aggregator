@@ -2,10 +2,14 @@
 
 {% block title %}Top Stories for {{g.user.username}}{% endblock %}
 
+{% block background_class %}
+class="bg-body-secondary p-5"
+{% endblock %}
+
 {% block content %}
-	<div class="container bg-white border border-dark-subtle rounded-5 p-3">
+	<div class="container bg-white border border-dark-subtle p-3">
 		<div class="row mx-3">
-			<h2 class="display-2">Top Stories</h2>
+			<h2 class="mt-3"><b>TOP STORIES</b></h2>
 		</div>
 		<div class="row mb-3 mx-3 text-secondary">
 			<aside>

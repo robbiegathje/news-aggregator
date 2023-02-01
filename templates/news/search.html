@@ -2,17 +2,21 @@
 
 {% block title %}Search{% endblock %}
 
+{% block background_class %}
+class="bg-body-secondary p-5"
+{% endblock %}
+
 {% block content %}
-	<div class="container bg-white border border-dark-subtle rounded-5 p-3">
-		<div class="row mx-3">
-			<h2 class="display-2">Search</h2>
+	<div class="container bg-white border border-dark-subtle p-3">
+		<div class="row mb-3 mx-3">
+			<h2 class="mt-3"><b>SEARCH</b></h2>
 		</div>
 		<form id="search-form">
 			<div class="row mb-3">
 				<label
 					for="search-term"
 					class="col-1 col-form-label">
-					Search:
+					Keyword:
 				</label>
 				<div class="col">
 					<input

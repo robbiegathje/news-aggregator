@@ -15,22 +15,28 @@
 		crossorigin="anonymous">
 	<link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-	<nav class="navbar">
+<body class="bg-body-secondary">
+	<nav class="navbar bg-info-subtle">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="/">News Aggregator</a>
+			<a class="navbar-brand" href="/">
+				<img
+					src="/static/images/news-over-coffee-logo.png"
+					alt="News Over Coffee Logo">
+			</a>
 			<div class="navbar-nav">
 				<a class="nav-link" href="/top-stories">Top Stories</a>
 			</div>
 		</div>
 	</nav>
-	{% for category, message in get_flashed_messages(with_categories=True) %}
-		<div class="alert alert-{{category}} mx-3" role="alert">
-			{{message}}
-		</div>
-	{% endfor %}
-	{% block content %}
-	{% endblock %}
+	<div {% block background_class %}{% endblock %}>
+		{% for category, message in get_flashed_messages(with_categories=True) %}
+			<div class="alert alert-{{category}} mx-3" role="alert">
+				{{message}}
+			</div>
+		{% endfor %}
+		{% block content %}
+		{% endblock %}
+	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
