@@ -2,7 +2,7 @@ from constants import *
 from flask import flash, Flask, g, redirect, render_template, request, session
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import LoginForm, PasswordChangeForm, RegistrationForm, UserPreferencesForm, UsernameChangeForm
-from helpers import build_api_query_data_dict
+from helpers import build_api_query
 from models import Country, db, Language, User
 from secret import SECRET_KEY
 
@@ -73,7 +73,6 @@ def register():
 		(country.code, country.country) for country in Country.query.all()
 	]
 	if form.validate_on_submit():
-		# needs refactor
 		user = User.register(
 			username=form.username.data,
 			password=form.password.data
@@ -82,7 +81,11 @@ def register():
 		db.session.commit()
 		if user:
 			add_user_id_to_session(user)
-			user.add_new_languages(form.languages.data)
+			if form.languages.data:
+				user.add_new_languages(form.languages.data)
+			else:
+				english = Language.query.filter_by(language='English').first()
+				user.add_new_languages([english.code])
 			user.add_new_countries(form.countries.data)
 			db.session.add(user)
 			db.session.commit()
@@ -218,7 +221,7 @@ def search():
 # API
 @app.route('/api/top-stories')
 def get_top_stories():
-	query_data = build_api_query_data_dict(
+	query_data = build_api_query(
 		request.args,
 		API_LANGUAGE_KEY,
 		API_LOCALE_KEY,
@@ -231,7 +234,7 @@ def get_top_stories():
 
 @app.route('/api/all-stories')
 def get_all_stories():
-	query_data = build_api_query_data_dict(
+	query_data = build_api_query(
 		request.args,
 		API_LANGUAGE_KEY,
 		API_PAGE_NUMBER_KEY,

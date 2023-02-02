@@ -36,11 +36,19 @@ class="full-screen-background-image p-5"
 								Password must be at least 8 characters.
 							</div>
 						</div>
+						<hr>
+						<div class="row m-3">
+							<aside class="form-text">
+								Below are your user preferences,
+								which can be changed within the site.
+							</aside>
+						</div>
 						<div class="row mb-3 mx-3">
 							{{ form.languages.label(class_='form-label') }}
 							{{ form.languages(class_='form-control') }}
 							<div class="form-text">
-								Please choose at least one language.
+								One or more languages may be selected.
+								Language defaults to English.
 								ctrl+click on Windows or
 								cmd+click on MacOS to select more than one.
 							</div>
@@ -49,8 +57,8 @@ class="full-screen-background-image p-5"
 							{{ form.countries.label(class_='form-label') }}
 							{{ form.countries(class_='form-control') }}
 							<div class="form-text">
-								Please choose at least one country
-								to receive news for.
+								One or more countries to receive news for
+								may be selected.
 								If none are selected, you will receive
 								global news in your language.
 								ctrl+click on Windows or

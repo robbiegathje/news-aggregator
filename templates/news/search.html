@@ -58,13 +58,17 @@ class="bg-body-secondary p-5"
 			style="display: none;">
 			<aside>
 				Selected Countries:
-				{% for country in g.user.countries %}
-					{% if country == g.user.countries[-1] %}
-						{{country.country}}
-					{% else %}
-						{{country.country}} |
-					{% endif %}
-				{% endfor %}
+				{% if not g.user.countries %}
+					All - Global News
+				{% else %}
+					{% for country in g.user.countries %}
+						{% if country == g.user.countries[-1] %}
+							{{country.country}}
+						{% else %}
+							{{country.country}} |
+						{% endif %}
+					{% endfor %}
+				{% endif %}
 			</aside>
 			<aside>
 				Languages:
@@ -75,6 +79,10 @@ class="bg-body-secondary p-5"
 						{{language.language}} |
 					{% endif %}
 				{% endfor %}
+			</aside>
+			<aside>
+				To change these settings please edit your
+				<a href="/users/{{ g.user.username }}/edit">user preferences</a>.
 			</aside>
 		</div>
 		<div class="row" id="stories"></div>

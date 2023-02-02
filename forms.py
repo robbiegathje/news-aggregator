@@ -19,14 +19,14 @@ class RegistrationForm (FlaskForm):
 		'Password',
 		validators=[InputRequired(), Length(min=8)]
 	)
-	languages = SelectMultipleField('Languages', validators=[InputRequired()])
-	countries = SelectMultipleField('Countries')
+	languages = SelectMultipleField('Languages - optional')
+	countries = SelectMultipleField('Countries - optional')
 
 class UserPreferencesForm (FlaskForm):
 	"""WTForms User Preferences Form"""
 
 	languages = SelectMultipleField('Languages', validators=[InputRequired()])
-	countries = SelectMultipleField('Countries')
+	countries = SelectMultipleField('Countries - optional')
 
 	password = PasswordField(
 		'Confirm Password',

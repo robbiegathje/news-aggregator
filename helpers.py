@@ -2,7 +2,7 @@ from constants import *
 from datetime import datetime, timedelta, timezone
 from secret import API_TOKEN
 
-def build_api_query_data_dict(request_args, *keys):
+def build_api_query(request_args, *keys):
 	query_data = {API_TOKEN_KEY: API_TOKEN}
 	for key in keys:
 		if key == NUM_OF_DAYS_FOR_SEARCH_KEY and NUM_OF_DAYS_FOR_SEARCH_KEY in request_args:
