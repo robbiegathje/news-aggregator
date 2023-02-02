@@ -48,8 +48,12 @@ def show_home_experience():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+	if g.user:
+		return redirect('/top-stories')
 	form = LoginForm()
-	if form.validate_on_submit():
+	if form.validate_on_submit() and User.query.filter_by(
+		username=form.username.data
+	).first():
 		user = User.authenticate(
 			username=form.username.data,
 			password=form.password.data
@@ -61,10 +65,23 @@ def login():
 				FLASH_SUCCESS_CATEGORY
 			)
 			return redirect('/top-stories')
+		else:
+			flash(INCORRECT_PASSWORD_MESSAGE, FLASH_DANGER_CATEGORY)
+			return redirect('/login')
+	elif form.validate_on_submit() and not User.query.filter_by(
+		username=form.username.data
+	).first():
+		flash(
+			USERNAME_DOES_NOT_EXIST_MESSAGE.format(username=form.username.data),
+			FLASH_DANGER_CATEGORY
+		)
+		return redirect('/login')
 	return render_template('users/login.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+	if g.user:
+		return redirect('/top-stories')
 	form = RegistrationForm()
 	form.languages.choices = [
 		(lang.code, lang.language) for lang in Language.query.all()
@@ -72,7 +89,9 @@ def register():
 	form.countries.choices = [
 		(country.code, country.country) for country in Country.query.all()
 	]
-	if form.validate_on_submit():
+	if form.validate_on_submit() and not User.query.filter_by(
+		username=form.username.data
+	).first():
 		user = User.register(
 			username=form.username.data,
 			password=form.password.data
@@ -94,6 +113,14 @@ def register():
 				FLASH_SUCCESS_CATEGORY
 			)
 			return redirect('/top-stories')
+	elif form.validate_on_submit() and User.query.filter_by(
+		username=form.username.data
+	).first():
+		flash(
+			USERNAME_ALREADY_EXISTS_MESSAGE.format(username=form.username.data),
+			FLASH_DANGER_CATEGORY
+		)
+		return redirect('/register')
 	return render_template('users/register.html', form=form)
 
 @app.route('/logout', methods=['POST'])
@@ -125,10 +152,7 @@ def edit_user_preferences(username):
 	form.countries.choices = [
 		(country.code, country.country) for country in Country.query.all()
 	]
-	if form.validate_on_submit() and User.authenticate(
-		username=g.user.username,
-		password=form.password.data
-	):
+	if form.validate_on_submit():
 		g.user.languages.clear()
 		g.user.countries.clear()
 		db.session.add(g.user)
@@ -161,7 +185,9 @@ def change_username(username):
 	if form.validate_on_submit() and User.authenticate(
 		username=g.user.username,
 		password=form.password.data
-	):
+	) and not User.query.filter_by(
+		username=form.username.data
+	).first():
 		g.user.username = form.username.data
 		db.session.add(g.user)
 		db.session.commit()
@@ -170,6 +196,20 @@ def change_username(username):
 			FLASH_SUCCESS_CATEGORY
 		)
 		return redirect('/top-stories')
+	elif form.validate_on_submit() and not User.authenticate(
+		username=g.user.username,
+		password=form.password.data
+	):
+		flash(INCORRECT_PASSWORD_MESSAGE, FLASH_DANGER_CATEGORY)
+		return redirect(f'/users/{ g.user.username }/change-username')
+	elif form.validate_on_submit() and User.query.filter_by(
+		username=form.username.data
+	).first():
+		flash(
+			USERNAME_ALREADY_EXISTS_MESSAGE.format(username=form.username.data),
+			FLASH_DANGER_CATEGORY
+		)
+		return redirect(f'/users/{ g.user.username }/change-username')
 	return render_template('users/change-username.html', form=form)
 
 @app.route('/users/<username>/change-password', methods=['GET', 'POST'])
@@ -200,7 +240,13 @@ def change_password(username):
 			return redirect('/top-stories')
 		else:
 			flash(UNCONFIRMED_NEW_PASSWORD_MESSAGE, FLASH_DANGER_CATEGORY)
-			return redirect(f'/users/{g.user.username}/change-password')
+			return redirect(f'/users/{ g.user.username }/change-password')
+	elif form.validate_on_submit() and not User.authenticate(
+		username=g.user.username,
+		password=form.current_password.data
+	):
+		flash(INCORRECT_PASSWORD_MESSAGE, FLASH_DANGER_CATEGORY)
+		return redirect(f'/users/{ g.user.username }/change-password')
 	return render_template('users/change-password.html', form=form)
 
 @app.route('/top-stories', methods=['GET'])

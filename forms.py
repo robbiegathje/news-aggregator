@@ -28,11 +28,6 @@ class UserPreferencesForm (FlaskForm):
 	languages = SelectMultipleField('Languages', validators=[InputRequired()])
 	countries = SelectMultipleField('Countries - optional')
 
-	password = PasswordField(
-		'Confirm Password',
-		validators=[InputRequired()]
-	)
-
 class UsernameChangeForm (FlaskForm):
 	"""WTForms Username Change Form"""
 
