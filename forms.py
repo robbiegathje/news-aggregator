@@ -1,6 +1,7 @@
+from constants import INVALID_USERNAME_MESSAGE, INVALID_PASSWORD_MESSAGE, PASSWORD_REGEXP, USERNAME_REGEXP
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, SelectMultipleField, StringField
-from wtforms.validators import InputRequired, Length
+from wtforms.validators import InputRequired, Length, Regexp
 
 class LoginForm (FlaskForm):
 	"""WTForms Login Form"""
@@ -13,11 +14,19 @@ class RegistrationForm (FlaskForm):
 
 	username = StringField(
 		'Username',
-		validators=[InputRequired(), Length(min=4, max=20)]
+		validators=[
+			InputRequired(),
+			Length(min=4, max=20),
+			Regexp(USERNAME_REGEXP, message=INVALID_USERNAME_MESSAGE)
+		]
 	)
 	password = PasswordField(
 		'Password',
-		validators=[InputRequired(), Length(min=8)]
+		validators=[
+			InputRequired(),
+			Length(min=8),
+			Regexp(PASSWORD_REGEXP, message=INVALID_PASSWORD_MESSAGE)
+		]
 	)
 	languages = SelectMultipleField('Languages - optional')
 	countries = SelectMultipleField('Countries - optional')
@@ -33,7 +42,11 @@ class UsernameChangeForm (FlaskForm):
 
 	username = StringField(
 		'New Username',
-		validators=[InputRequired(), Length(min=4, max=20)]
+		validators=[
+			InputRequired(),
+			Length(min=4, max=20),
+			Regexp(USERNAME_REGEXP, message=INVALID_USERNAME_MESSAGE)
+		]
 	)
 
 	password = PasswordField(
@@ -50,7 +63,11 @@ class PasswordChangeForm (FlaskForm):
 	)
 	new_password = PasswordField(
 		'New Password',
-		validators=[InputRequired(), Length(min=8)]
+		validators=[
+			InputRequired(),
+			Length(min=8),
+			Regexp(PASSWORD_REGEXP, message=INVALID_PASSWORD_MESSAGE)
+		]
 	)
 	confirm_new_password = PasswordField(
 		'Confirm New Password',
