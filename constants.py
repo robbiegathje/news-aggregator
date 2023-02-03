@@ -36,3 +36,6 @@ WELCOME_RETURNING_USER_MESSAGE = 'Welcome back {username}!'
 # Constants related to username & password validation
 PASSWORD_REGEXP = '^[\w!@$%&*,.-]+$'
 USERNAME_REGEXP = '^\w+$'
+
+# Misc.
+DATABASE_URL_KEY = 'DATABASE_URL'

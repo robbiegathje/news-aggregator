@@ -6,11 +6,14 @@ from helpers import build_api_query
 from models import Country, db, Language, User
 from secret import SECRET_KEY
 
+import os
 import requests
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///news'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+	DATABASE_URL_KEY, 'postgresql:///news'
+	)
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = SECRET_KEY
 
@@ -278,6 +281,7 @@ def get_top_stories():
 	news_api_response = requests.get(f'{API_BASE_URL}/top', params=query_data)
 	return news_api_response.json()
 
+# The All Stories API route is not currently in use on the client side.
 @app.route('/api/all-stories')
 def get_all_stories():
 	query_data = build_api_query(
