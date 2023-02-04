@@ -174,3 +174,115 @@ class DatabaseModelsTestCase (TestCase):
 			db.session.add(nonunique_country_code)
 			self.assertRaises(IntegrityError, db.session.commit)
 			db.session.rollback()
+
+	def test_user_add_new_languages(self):
+		with app.app_context():
+			user = User.register('testuser', 'testing')
+			db.session.add(user)
+			db.session.commit()
+
+			english = Language(language='English', code='en', english_name='English')
+			spanish = Language(code='es', english_name='Spanish', language='Español')
+			db.session.add_all([english, spanish])
+			db.session.commit()
+
+			user_refresh = User.query.filter_by(username='testuser').first()
+			self.assertEqual(len(user_refresh.languages), 0)
+			user_refresh.add_new_languages(['en', 'es'])
+			db.session.add(user_refresh)
+			db.session.commit()
+
+			user_with_language_preferences = User.query.filter_by(username='testuser').first()
+			english_refresh = Language.query.filter_by(code='en').first()
+			spanish_refresh = Language.query.filter_by(code='es').first()
+			user_english_preference = Language_Preference.query.filter_by(
+				language_id=english_refresh.id).first()
+			user_spanish_preference = Language_Preference.query.filter_by(
+				language_id=spanish_refresh.id).first()
+			self.assertEqual(len(user_with_language_preferences.languages), 2)
+			self.assertEqual(user_with_language_preferences.languages[0], english_refresh)
+			self.assertEqual(user_with_language_preferences.languages[1], spanish_refresh)
+			self.assertEqual(user_english_preference.user_id, user_with_language_preferences.id)
+			self.assertEqual(user_spanish_preference.user_id, user_with_language_preferences.id)
+			self.assertEqual(user_english_preference.language_id, english_refresh.id)
+			self.assertEqual(user_spanish_preference.language_id, spanish_refresh.id)
+
+	def test_language_preference_unique_constraint(self):
+		with app.app_context():
+			user = User.register('testuser', 'testing')
+			db.session.add(user)
+			db.session.commit()
+
+			english = Language(language='English', code='en', english_name='English')
+			db.session.add(english)
+			db.session.commit()
+
+			user_refresh = User.query.filter_by(username='testuser').first()
+			self.assertEqual(len(user_refresh.languages), 0)
+			user_refresh.add_new_languages(['en'])
+			db.session.add(user_refresh)
+			db.session.commit()
+
+			user_with_language_preferences = User.query.filter_by(username='testuser').first()
+			english_refresh = Language.query.filter_by(code='en').first()
+			duplicate_language_preference = Language_Preference(
+				user_id=user_with_language_preferences.id,
+				language_id=english_refresh.id
+			)
+			db.session.add(duplicate_language_preference)
+			self.assertRaises(IntegrityError, db.session.commit)
+
+	def test_user_add_new_countries(self):
+		with app.app_context():
+			user = User.register('testuser', 'testing')
+			db.session.add(user)
+			db.session.commit()
+
+			usa = Country(country='United States Of America', code='us')
+			mexico = Country(code='mx', country='Mexico')
+			db.session.add_all([usa, mexico])
+			db.session.commit()
+
+			user_refresh = User.query.filter_by(username='testuser').first()
+			self.assertEqual(len(user_refresh.countries), 0)
+			user_refresh.add_new_countries(['us', 'mx'])
+			db.session.add(user_refresh)
+			db.session.commit()
+
+			user_with_locales = User.query.filter_by(username='testuser').first()
+			usa_refresh = Country.query.filter_by(code='us').first()
+			mexico_refresh = Country.query.filter_by(code='mx').first()
+			user_usa_locale = Locale.query.filter_by(country_id=usa_refresh.id).first()
+			user_mexico_locale = Locale.query.filter_by(country_id=mexico_refresh.id).first()
+			self.assertEqual(len(user_with_locales.countries), 2)
+			self.assertEqual(user_with_locales.countries[0], usa_refresh)
+			self.assertEqual(user_with_locales.countries[1], mexico_refresh)
+			self.assertEqual(user_usa_locale.user_id, user_with_locales.id)
+			self.assertEqual(user_mexico_locale.user_id, user_with_locales.id)
+			self.assertEqual(user_usa_locale.country_id, usa_refresh.id)
+			self.assertEqual(user_mexico_locale.country_id, mexico_refresh.id)
+
+	def test_locale_unique_constraint(self):
+		with app.app_context():
+			user = User.register('testuser', 'testing')
+			db.session.add(user)
+			db.session.commit()
+
+			usa = Country(country='United States Of America', code='us')
+			db.session.add(usa)
+			db.session.commit()
+
+			user_refresh = User.query.filter_by(username='testuser').first()
+			self.assertEqual(len(user_refresh.countries), 0)
+			user_refresh.add_new_countries(['us'])
+			db.session.add(user_refresh)
+			db.session.commit()
+
+			user_with_locales = User.query.filter_by(username='testuser').first()
+			usa_refresh = Country.query.filter_by(code='us').first()
+			duplicate_locale = Locale(
+				user_id=user_with_locales.id,
+				country_id=usa_refresh.id
+			)
+			db.session.add(duplicate_locale)
+			self.assertRaises(IntegrityError, db.session.commit)
