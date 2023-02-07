@@ -645,4 +645,100 @@ class NewsRoutesTestCase (TestCase):
 	"""Test routes related to displaying news articles"""
 
 	def setUp(self):
+		with app.app_context():
+			Language_Preference.query.delete()
+			Locale.query.delete()
+			User.query.delete()
+			Language.query.delete()
+			Country.query.delete()
+			db.session.commit()
+
+			user = User.register('testuser', 'usedintesting')
+			db.session.add(user)
+			db.session.commit()
+
+			english = Language(language='English', code='en', english_name='English')
+			spanish = Language(code='es', english_name='Spanish', language='Español')
+			db.session.add_all([english, spanish])
+			db.session.commit()
+
+			usa = Country(country='United States Of America', code='us')
+			mexico = Country(code='mx', country='Mexico')
+			db.session.add_all([usa, mexico])
+			db.session.commit()
+
+			user_refresh = User.query.filter_by(username='testuser').first()
+			user_refresh.add_new_languages(['en', 'es'])
+			user_refresh.add_new_countries(['us', 'mx'])
+			db.session.add(user_refresh)
+			db.session.commit()
+		
 		self.client = app.test_client()
+	
+	def test_show_top_stories(self):
+		with self.client as client:
+			with app.app_context():
+				user = User.query.filter_by(username='testuser').first()
+				with client.session_transaction() as session:
+					session[CURR_USER_KEY] = user.id
+			response = client.get('/top-stories')
+			html = response.get_data(as_text=True)
+			self.assertEqual(response.status_code, 200)
+			user_refresh = User.query.filter_by(username='testuser').first()
+			self.assertIn(
+				f'<title>News Over Coffee - Top Stories for {user_refresh.username}</title>',
+				html
+			)
+			for country in user_refresh.countries:
+				self.assertIn(f'{country.country}', html)
+			for language in user_refresh.languages:
+				self.assertIn(f'{language.language}', html)
+	
+	def test_register_then_show_top_stories_with_default_preferences(self):
+		with self.client as client:
+			response = client.post(
+				'/register',
+				data={'username': 'secondtestuser', 'password': 'moretesting'},
+				follow_redirects=True
+			)
+			html = response.get_data(as_text=True)
+			self.assertEqual(response.status_code, 200)
+			user = User.query.filter_by(username='secondtestuser').first()
+			self.assertIn(
+				f'<title>News Over Coffee - Top Stories for {user.username}</title>',
+				html
+			)
+			self.assertIn('All - Global News', html)
+			self.assertIn('English', html)
+	
+	def test_show_top_stories_logged_out(self):
+		with self.client as client:
+			response = client.get('/top-stories', follow_redirects=True)
+			html = response.get_data(as_text=True)
+			self.assertEqual(response.status_code, 200)
+			self.assertIn('<h2 class="mt-3"><b>LOGIN</b></h2>', html)
+			self.assertIn(NEED_TO_LOGIN_AUTH_MESSAGE, html)
+
+	def test_search(self):
+		with self.client as client:
+			with app.app_context():
+				user = User.query.filter_by(username='testuser').first()
+				with client.session_transaction() as session:
+					session[CURR_USER_KEY] = user.id
+			response = client.get('/search')
+			html = response.get_data(as_text=True)
+			self.assertEqual(response.status_code, 200)
+			self.assertIn('<h2 class="mt-3"><b>SEARCH</b></h2>', html)
+			self.assertIn('Keyword:', html)
+			self.assertIn('Publication Timeframe:', html)
+			self.assertIn('<option value="1">Last 24 Hours</option>', html)
+			self.assertIn('<option value="7" selected>Last 7 Days</option>', html)
+			self.assertIn('<option value="365">Last Year</option>', html)
+	
+	def test_search_logged_out(self):
+		with self.client as client:
+			response = client.get('/search', follow_redirects=True)
+			html = response.get_data(as_text=True)
+			self.assertEqual(response.status_code, 200)
+			self.assertIn('<h2 class="mt-3"><b>LOGIN</b></h2>', html)
+			self.assertIn(NEED_TO_LOGIN_AUTH_MESSAGE, html)
