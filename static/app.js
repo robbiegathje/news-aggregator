@@ -56,7 +56,7 @@ async function getAllStoriesBySearchTerm(search, days, language, page=1) {
 
 function generateNewsArticleHTML(articleData) {
 	let containingBootstrapColumn = document.createElement('div');
-	containingBootstrapColumn.className = 'col-4 my-3';
+	containingBootstrapColumn.className = 'col-12 col-md-6 col-xl-4 my-3';
 	let articleCard = document.createElement('div');
 	articleCard.className = 'card h-100';
 	let cardImage = document.createElement('img');
