@@ -13,9 +13,13 @@ app = Flask(__name__)
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+uri = os.environ.get(
 	DATABASE_URL_KEY, 'postgresql:///news'
 	)
+if uri.startswith('postgres://'):
+	uri.replace('postgres://', 'postgresql://', 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = SECRET_KEY
 
