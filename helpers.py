@@ -1,6 +1,7 @@
 from constants import *
 from datetime import datetime, timedelta, timezone
-# from secret import API_TOKEN - commented out for production code
+# from secret import API_TOKEN
+# the above line is commented out for production code
 
 import os
 

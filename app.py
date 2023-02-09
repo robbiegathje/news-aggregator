@@ -4,7 +4,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from forms import LoginForm, PasswordChangeForm, RegistrationForm, UserPreferencesForm, UsernameChangeForm
 from helpers import build_api_query
 from models import Country, db, Language, User
-# from secret import SECRET_KEY - commented out for production code
+# from secret import SECRET_KEY
+# the above line is commented out for production code
 
 import os
 import requests
