@@ -3,14 +3,13 @@
 # objects must occasionally be re-retrieved amidst testing.
 # You will see this noted by variable names with 'refresh' stated.
 
-from constants import DATABASE_URL_KEY
 from models import Country, db, Language, Language_Preference, Locale, User
 from sqlalchemy.exc import DataError, IntegrityError
 from unittest import TestCase
 
 import os
 
-os.environ[DATABASE_URL_KEY] = 'postgresql:///test_news'
+os.environ['DATABASE_URL'] = 'postgresql:///test_news'
 
 from app import app
 

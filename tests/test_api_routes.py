@@ -1,10 +1,10 @@
-from constants import API_LANGUAGE_KEY, DATABASE_URL_KEY
+from constants import API_LANGUAGE_KEY
 from models import db
 from unittest import TestCase
 
 import os
 
-os.environ[DATABASE_URL_KEY] = 'postgresql:///test_news'
+os.environ['DATABASE_URL'] = 'postgresql:///test_news'
 
 from app import app
 
