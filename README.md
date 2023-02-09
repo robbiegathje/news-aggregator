@@ -32,7 +32,7 @@ API: [The News API](https://www.thenewsapi.com/)
 
 I want to give a huge thank you to The News API for maintaining such a massive database of international, multilingual, up-to-the-minute news!
 
-Additionally, a massive thank you goes out to my wife, Carly Gathje, who helped me with design choices every step of the way.
+Additionally, a massive thank you goes out to my wife, Carly Gathje, who helped me with design choices every step of the way!
 
 ## Technologies Used
 
