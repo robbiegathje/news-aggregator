@@ -7,7 +7,6 @@ from models import Country, db, Language, User
 # from secret import SECRET_KEY - commented out for production code
 
 import os
-import re
 import requests
 
 app = Flask(__name__)
@@ -17,7 +16,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 uri = os.environ.get('DATABASE_URL', 'postgresql:///news')
 if uri.startswith('postgres://'):
 	uri.replace('postgres://', 'postgresql://', 1)
-# rest of connection code using the connection string `uri`
+
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = SECRET_KEY
