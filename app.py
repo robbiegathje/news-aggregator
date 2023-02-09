@@ -13,9 +13,7 @@ app = Flask(__name__)
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-uri = os.environ.get(
-	DATABASE_URL_KEY, 'postgresql:///news'
-	)
+uri = os.environ.get('DATABASE_URL', 'postgresql:///news')
 if uri.startswith('postgres://'):
 	uri.replace('postgres://', 'postgresql://', 1)
 
