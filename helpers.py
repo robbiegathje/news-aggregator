@@ -1,6 +1,10 @@
 from constants import *
 from datetime import datetime, timedelta, timezone
-from secret import API_TOKEN
+# from secret import API_TOKEN - commented out for production code
+
+import os
+
+API_TOKEN = os.environ.get('API_TOKEN')
 
 def build_api_query(request_args, *keys):
 	query_data = {API_TOKEN_KEY: API_TOKEN}

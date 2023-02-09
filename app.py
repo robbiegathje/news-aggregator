@@ -4,12 +4,14 @@ from flask_debugtoolbar import DebugToolbarExtension
 from forms import LoginForm, PasswordChangeForm, RegistrationForm, UserPreferencesForm, UsernameChangeForm
 from helpers import build_api_query
 from models import Country, db, Language, User
-from secret import SECRET_KEY
+# from secret import SECRET_KEY - commented out for production code
 
 import os
 import requests
 
 app = Flask(__name__)
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 	DATABASE_URL_KEY, 'postgresql:///news'

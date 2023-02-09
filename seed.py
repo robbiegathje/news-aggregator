@@ -52,6 +52,8 @@ API_SUPPORTED_LANGUAGES = [
 
 with app.app_context():
 	db.init_app(app)
+	db.drop_all()
+	db.create_all()
 
 	for country in API_SUPPORTED_COUNTRIES:
 		new_country = Country(code=country[0], country=country[1])
