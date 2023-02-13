@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 	SEARCH_FORM.addEventListener('submit', async function(event) {
 		event.preventDefault();
-		USER_SEARCH_SETTINGS.style.display = 'None';
-		LOADING_CONTAINER.style.display = '';
+		USER_SEARCH_SETTINGS.classList.add('d-none');
+		LOADING_CONTAINER.classList.remove('d-none');
 		STORIES_CONTAINER.innerText = '';
 		PAGE_NUMBER_OF_RESULTS = 1;
 		let searchTerm = SEARCH_TERM_INPUT.value;
@@ -36,18 +36,29 @@ document.addEventListener('DOMContentLoaded', async function() {
 			PAGE_NUMBER_OF_RESULTS
 		);
 		let articleCardCollection = [];
-		for (let articleData of response.data.data) {
-			let articleCard = generateNewsArticleHTML(articleData);
-			articleCardCollection.push(articleCard);
+		if (response.data.meta['found'] === 0) {
+			FETCH_CONTAINER.classList.add('d-none');
+			let containingBootstrapColumn = document.createElement('div');
+			containingBootstrapColumn.className = 'col justify-content-center text-center';
+			let noResultsMessage = document.createElement('h5');
+			noResultsMessage.className = 'display-5';
+			noResultsMessage.innerText = 'No Results Found.';
+			containingBootstrapColumn.append(noResultsMessage);
+			STORIES_CONTAINER.append(containingBootstrapColumn);
+		} else {
+			for (let articleData of response.data.data) {
+				let articleCard = generateNewsArticleHTML(articleData);
+				articleCardCollection.push(articleCard);
+			};
+			FETCH_CONTAINER.classList.remove('d-none');
+			appendAllNewsArticles(articleCardCollection, STORIES_CONTAINER);
 		};
-		LOADING_CONTAINER.style.display = 'None';
-		USER_SEARCH_SETTINGS.style.display = '';
-		FETCH_CONTAINER.style.display = '';
-		appendAllNewsArticles(articleCardCollection, STORIES_CONTAINER);
+		LOADING_CONTAINER.classList.add('d-none');
+		USER_SEARCH_SETTINGS.classList.remove('d-none');
 	});
 
 	FETCH_BUTTON.addEventListener('click', async function() {
-		LOADING_CONTAINER.style.display = '';
+		LOADING_CONTAINER.classList.remove('d-none');
 		PAGE_NUMBER_OF_RESULTS ++;
 		let searchTerm = SEARCH_TERM_INPUT.value;
 		let searchTimeframe = SEARCH_TIMEFRAME_INPUT.value;
@@ -63,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 			let articleCard = generateNewsArticleHTML(articleData);
 			articleCardCollection.push(articleCard);
 		};
-		LOADING_CONTAINER.style.display = 'None';
+		LOADING_CONTAINER.classList.add('d-none');
 		appendAllNewsArticles(articleCardCollection, STORIES_CONTAINER);
 	});
 });

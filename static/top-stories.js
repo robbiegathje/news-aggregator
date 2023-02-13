@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 		let articleCard = generateNewsArticleHTML(articleData);
 		articleCardCollection.push(articleCard);
 	};
-	LOADING_CONTAINER.style.display = 'None';
-	FETCH_CONTAINER.style.display = '';
+	LOADING_CONTAINER.classList.add('d-none');
+	FETCH_CONTAINER.classList.remove('d-none');
 	appendAllNewsArticles(articleCardCollection, STORIES_CONTAINER);
 
 	FETCH_BUTTON.addEventListener('click', async function() {
-		LOADING_CONTAINER.style.display = '';
+		LOADING_CONTAINER.classList.remove('d-none');
 		PAGE_NUMBER_OF_RESULTS ++;
 		let response = await getTopStories(
 			userLanguageCodes.join(','),
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 			let articleCard = generateNewsArticleHTML(articleData);
 			articleCardCollection.push(articleCard);
 		};
-		LOADING_CONTAINER.style.display = 'None';
+		LOADING_CONTAINER.classList.add('d-none');
 		appendAllNewsArticles(articleCardCollection, STORIES_CONTAINER);
 	});
 });

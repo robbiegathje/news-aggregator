@@ -53,9 +53,8 @@ class="bg-body-secondary p-5"
 			</div>
 		</form>
 		<div
-			class="row mb-3 mx-3 text-secondary"
-			id="user-search-settings"
-			style="display: none;">
+			class="row mb-3 mx-3 text-secondary d-none"
+			id="user-search-settings">
 			<aside>
 				Selected Countries:
 				{% if not g.user.countries %}
@@ -87,18 +86,16 @@ class="bg-body-secondary p-5"
 		</div>
 		<div class="row" id="stories"></div>
 		<div
-			class="row my-3 justify-content-center text-center"
-			id="loading"
-			style="display: none;">
+			class="row my-3 justify-content-center text-center d-none"
+			id="loading">
 			<div class="col">
 				<h5 class="display-5">Loading</h5>
 				<i class="fa-solid fa-spinner fa-spin"></i>
 			</div>
 		</div>
 		<div
-			class="row my-3 justify-content-center text-center"
-			id="fetch-container"
-			style="display: none;">
+			class="row my-3 justify-content-center text-center d-none"
+			id="fetch-container">
 			<div class="col">
 				<button class="btn btn-primary" id="fetch">Load More</button>
 			</div>

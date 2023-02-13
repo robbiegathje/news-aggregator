@@ -18,6 +18,32 @@ class="full-screen-background-image p-5"
 							</b>
 						</h2>
 					</div>
+					<div class="row mb-3 mx-3 text-secondary">
+						<aside>
+							Currently Selected Countries:
+							{% if not g.user.countries %}
+								All - Global News
+							{% else %}
+								{% for country in g.user.countries %}
+									{% if country == g.user.countries[-1] %}
+										{{country.country}}
+									{% else %}
+										{{country.country}} |
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						</aside>
+						<aside>
+							Languages:
+							{% for language in g.user.languages %}
+								{% if language == g.user.languages[-1] %}
+									{{language.language}}
+								{% else %}
+									{{language.language}} |
+								{% endif %}
+							{% endfor %}
+						</aside>
+					</div>
 					<form
 						action="/users/{{g.user.username}}/edit"
 						method="POST">

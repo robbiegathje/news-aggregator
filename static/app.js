@@ -61,14 +61,14 @@ function generateNewsArticleHTML(articleData) {
 	articleCard.className = 'card h-100';
 	let cardImage = document.createElement('img');
 	cardImage.src = articleData.image_url;
-	cardImage.className = 'card-img-top';
+	cardImage.className = 'card-img-top h-50';
 	let cardBody = document.createElement('div');
 	cardBody.className = 'card-body';
 	let cardTitle = document.createElement('h5');
 	cardTitle.innerText = articleData.title;
 	cardTitle.className = 'card-title';
 	let cardSourceSubtitle = document.createElement('h6');
-	cardSourceSubtitle.innerText = articleData.source;
+	cardSourceSubtitle.innerText = `${articleData.source} | ${articleData.published_at.slice(0, 10)}`;
 	cardSourceSubtitle.className = 'card-subtitle text-secondary';
 	let cardText = document.createElement('p');
 	cardText.innerText = articleData.description;
