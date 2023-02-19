@@ -26,6 +26,7 @@ INVALID_USERNAME_MESSAGE = 'Username must only contain letters, numbers, and/or 
 INVALID_PASSWORD_MESSAGE = 'Password must only contain letters, numbers, and/or the following special characters: ! @ $ % & * , . - _'
 LOGOUT_MESSAGE = 'Successfully logged out {username}.'
 NEED_TO_LOGIN_AUTH_MESSAGE = 'Please login to continue.'
+NEW_PASSWORD_MATCHES_OLD_MESSAGE = 'Your new password cannot be the same as your current password.'
 UNCONFIRMED_NEW_PASSWORD_MESSAGE = 'Password entered under "Confirm New Password" does not match "New Password."'
 USERNAME_ALREADY_EXISTS_MESSAGE = 'Username "{username}" already exists.'
 USERNAME_DOES_NOT_EXIST_MESSAGE = 'Username "{username}" does not exist.'

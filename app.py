@@ -59,8 +59,8 @@ def login():
 	if g.user:
 		return redirect('/top-stories')
 	form = LoginForm()
-	if form.validate_on_submit() and User.query.filter_by(
-		username=form.username.data
+	if form.validate_on_submit() and User.query.filter(
+		User.username.ilike(form.username.data)
 	).first():
 		user = User.authenticate(
 			username=form.username.data,
@@ -76,8 +76,8 @@ def login():
 		else:
 			flash(INCORRECT_PASSWORD_MESSAGE, FLASH_DANGER_CATEGORY)
 			return redirect('/login')
-	elif form.validate_on_submit() and not User.query.filter_by(
-		username=form.username.data
+	elif form.validate_on_submit() and not User.query.filter(
+		User.username.ilike(form.username.data)
 	).first():
 		flash(
 			USERNAME_DOES_NOT_EXIST_MESSAGE.format(username=form.username.data),
@@ -97,8 +97,8 @@ def register():
 	form.countries.choices = [
 		(country.code, country.country) for country in Country.query.all()
 	]
-	if form.validate_on_submit() and not User.query.filter_by(
-		username=form.username.data
+	if form.validate_on_submit() and not User.query.filter(
+		User.username.ilike(form.username.data)
 	).first():
 		user = User.register(
 			username=form.username.data,
@@ -121,8 +121,8 @@ def register():
 				FLASH_SUCCESS_CATEGORY
 			)
 			return redirect('/top-stories')
-	elif form.validate_on_submit() and User.query.filter_by(
-		username=form.username.data
+	elif form.validate_on_submit() and User.query.filter(
+		User.username.ilike(form.username.data)
 	).first():
 		flash(
 			USERNAME_ALREADY_EXISTS_MESSAGE.format(username=form.username.data),
@@ -146,7 +146,7 @@ def edit_user_preferences(username):
 	if not g.user:
 		flash(NEED_TO_LOGIN_AUTH_MESSAGE, FLASH_DANGER_CATEGORY)
 		return redirect('/login')
-	user_to_edit = User.query.filter_by(username=username).first()
+	user_to_edit = User.query.filter(User.username.ilike(username)).first()
 	if not g.user == user_to_edit:
 		flash(
 			INCORRECT_USER_AUTH_MESSAGE.format(username=g.user.username),
@@ -182,7 +182,7 @@ def change_username(username):
 	if not g.user:
 		flash(NEED_TO_LOGIN_AUTH_MESSAGE, FLASH_DANGER_CATEGORY)
 		return redirect('/login')
-	user_to_edit = User.query.filter_by(username=username).first()
+	user_to_edit = User.query.filter(User.username.ilike(username)).first()
 	if not g.user == user_to_edit:
 		flash(
 			INCORRECT_USER_AUTH_MESSAGE.format(username=g.user.username),
@@ -193,8 +193,8 @@ def change_username(username):
 	if form.validate_on_submit() and User.authenticate(
 		username=g.user.username,
 		password=form.password.data
-	) and not User.query.filter_by(
-		username=form.username.data
+	) and not User.query.filter(
+		User.username.ilike(form.username.data)
 	).first():
 		g.user.username = form.username.data
 		db.session.add(g.user)
@@ -210,8 +210,8 @@ def change_username(username):
 	):
 		flash(INCORRECT_PASSWORD_MESSAGE, FLASH_DANGER_CATEGORY)
 		return redirect(f'/users/{ g.user.username }/change-username')
-	elif form.validate_on_submit() and User.query.filter_by(
-		username=form.username.data
+	elif form.validate_on_submit() and User.query.filter(
+		User.username.ilike(form.username.data)
 	).first():
 		flash(
 			USERNAME_ALREADY_EXISTS_MESSAGE.format(username=form.username.data),
@@ -225,7 +225,7 @@ def change_password(username):
 	if not g.user:
 		flash(NEED_TO_LOGIN_AUTH_MESSAGE, FLASH_DANGER_CATEGORY)
 		return redirect('/login')
-	user_to_edit = User.query.filter_by(username=username).first()
+	user_to_edit = User.query.filter(User.username.ilike(username)).first()
 	if not g.user == user_to_edit:
 		flash(
 			INCORRECT_USER_AUTH_MESSAGE.format(username=g.user.username),
@@ -237,7 +237,7 @@ def change_password(username):
 		username=g.user.username,
 		password=form.current_password.data
 	):
-		if form.new_password.data == form.confirm_new_password.data:
+		if form.new_password.data != form.current_password.data and form.new_password.data == form.confirm_new_password.data:
 			g.user.change_password(form.new_password.data)
 			db.session.add(g.user)
 			db.session.commit()
@@ -246,6 +246,9 @@ def change_password(username):
 				FLASH_SUCCESS_CATEGORY
 			)
 			return redirect('/top-stories')
+		elif form.new_password.data == form.current_password.data:
+			flash(NEW_PASSWORD_MATCHES_OLD_MESSAGE, FLASH_DANGER_CATEGORY)
+			return redirect(f'/users/{ g.user.username }/change-password')
 		else:
 			flash(UNCONFIRMED_NEW_PASSWORD_MESSAGE, FLASH_DANGER_CATEGORY)
 			return redirect(f'/users/{ g.user.username }/change-password')

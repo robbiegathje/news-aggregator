@@ -25,7 +25,7 @@ class User (db.Model):
 	
 	@classmethod
 	def authenticate(cls, username, password):
-		user = User.query.filter_by(username=username).first()
+		user = User.query.filter(User.username.ilike(username)).first()
 		if user and bcrypt.check_password_hash(user.password, password):
 			return user
 		return False
