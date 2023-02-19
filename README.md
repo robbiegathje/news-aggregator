@@ -26,18 +26,31 @@ User Flow:
 
 ![User Flow Diagram](docs/user_flow_diagram.png)
 
-## A Couple Thank Yous
+## Testing
 
-API: [The News API](https://www.thenewsapi.com/)
+Tests are all found in the tests/ directory and can be run from the command line in the root directory with:
 
-I want to give a huge thank you to The News API for maintaining such a massive database of international, multilingual, up-to-the-minute news!
-
-Additionally, a massive thank you goes out to my wife, Carly Gathje, who helped me with design choices every step of the way!
+python3 -m unittest tests/{NAME\_OF\_FILE}
 
 ## Technologies Used
 
-News Over Coffee is written in both **Python** (for the back-end) and **JavaScript** (for the front-end). It utilizes the **Flask** web framework to build out the site's routes, **SQLAlchemy with PostgreSQL** for the database, and **bcrypt** for password encryption. Lastly, it uses **Bootstrap** for css styles.
+* [The News API](https://www.thenewsapi.com/)
+* Python
+* Flask
+* PostgreSQL
+* SQLAlchemy
+* JavaScript
+* bcrypt
+* HTML
+* Bootstrap
+* CSS
 
 Database Schema:
 
 ![Database Schema Diagram](docs/database_schema.png)
+
+## A Couple Thank Yous
+
+I want to give a huge thank you to The News API for maintaining such a massive database of international, multilingual, up-to-the-minute news!
+
+Additionally, a massive thank you goes out to my wife, Carly Gathje, who helped me with design choices every step of the way!
