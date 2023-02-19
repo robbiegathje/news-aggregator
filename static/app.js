@@ -61,7 +61,11 @@ function generateNewsArticleHTML(articleData) {
 	articleCard.className = 'card h-100';
 	let cardImage = document.createElement('img');
 	cardImage.src = articleData.image_url;
-	cardImage.className = 'card-img-top h-50';
+	cardImage.className = 'card-img-top';
+	cardImage.style = 'max-height: 300px;';
+	cardImage.setAttribute(
+		'onerror',
+		'this.onerror=null;this.src="/static/images/default-article-image.jpg";');
 	let cardBody = document.createElement('div');
 	cardBody.className = 'card-body';
 	let cardTitle = document.createElement('h5');

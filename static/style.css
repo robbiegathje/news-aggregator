@@ -3,3 +3,9 @@
 	background-image: url(/static/images/login-and-register-background.jpeg);
 	background-repeat: no-repeat;
 };
+
+/* .card-img-top {
+	due to Bootstrap overriding issues,
+	'max-height: 300px;' has been set as inline style
+	for each of these elements in app.js
+} */
