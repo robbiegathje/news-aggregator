@@ -30,7 +30,7 @@ User Flow:
 
 Tests are all found in the tests/ directory and can be run from the command line in the root directory with:
 
-python3 -m unittest tests/{NAME\_OF\_FILE}
+`python3 -m unittest tests/{NAME\_OF\_FILE}`
 
 ## Technologies Used
 
