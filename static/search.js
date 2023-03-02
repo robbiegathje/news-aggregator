@@ -8,7 +8,7 @@
 
 let PAGE_NUMBER_OF_RESULTS = 1;
 
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
 	const FETCH_BUTTON = document.getElementById('fetch');
 	const FETCH_CONTAINER = document.getElementById('fetch-container');
 	const LOADING_CONTAINER = document.getElementById('loading');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 		'user-search-settings'
 	);
 
-	SEARCH_FORM.addEventListener('submit', async function(event) {
+	SEARCH_FORM.addEventListener('submit', async function (event) {
 		event.preventDefault();
 		USER_SEARCH_SETTINGS.classList.add('d-none');
 		LOADING_CONTAINER.classList.remove('d-none');
@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 		if (response.data.meta['found'] === 0) {
 			FETCH_CONTAINER.classList.add('d-none');
 			let containingBootstrapColumn = document.createElement('div');
-			containingBootstrapColumn.className = 'col justify-content-center text-center';
+			containingBootstrapColumn.className =
+				'col justify-content-center text-center';
 			let noResultsMessage = document.createElement('h5');
 			noResultsMessage.className = 'display-5';
 			noResultsMessage.innerText = 'No Results Found.';
@@ -49,17 +50,17 @@ document.addEventListener('DOMContentLoaded', async function() {
 			for (let articleData of response.data.data) {
 				let articleCard = generateNewsArticleHTML(articleData);
 				articleCardCollection.push(articleCard);
-			};
+			}
 			FETCH_CONTAINER.classList.remove('d-none');
 			appendAllNewsArticles(articleCardCollection, STORIES_CONTAINER);
-		};
+		}
 		LOADING_CONTAINER.classList.add('d-none');
 		USER_SEARCH_SETTINGS.classList.remove('d-none');
 	});
 
-	FETCH_BUTTON.addEventListener('click', async function() {
+	FETCH_BUTTON.addEventListener('click', async function () {
 		LOADING_CONTAINER.classList.remove('d-none');
-		PAGE_NUMBER_OF_RESULTS ++;
+		PAGE_NUMBER_OF_RESULTS++;
 		let searchTerm = SEARCH_TERM_INPUT.value;
 		let searchTimeframe = SEARCH_TIMEFRAME_INPUT.value;
 		let response = await getTopStoriesBySearchTerm(
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 		for (let articleData of response.data.data) {
 			let articleCard = generateNewsArticleHTML(articleData);
 			articleCardCollection.push(articleCard);
-		};
+		}
 		LOADING_CONTAINER.classList.add('d-none');
 		appendAllNewsArticles(articleCardCollection, STORIES_CONTAINER);
 	});
